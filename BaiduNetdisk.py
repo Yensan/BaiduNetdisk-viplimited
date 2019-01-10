@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import subprocess
-import os, stat, shutil
+import os, stat
 import datetime, time
 import sqlite3
-
 
 def is_BaiduNetdisk_running():
     out = subprocess.getoutput('ps aux | grep BaiduNetdisk_mac | grep -v grep')
@@ -33,10 +32,11 @@ def getFiles():
 
 def rm_rf(path):
     for fileList in os.walk(path):
-        for name in fileList[2]:
+        files = [f for f in fileList[2] if 'transmission' in f]
+        # files = fileList[2]  这样会删除所有的文件，没有必要
+        for name in files:
             os.chmod(os.path.join(fileList[0], name), stat.S_IWRITE)
             os.remove(os.path.join(fileList[0], name))
-    shutil.rmtree(path)
 
 def main():
     echos = ["百度盘高速试用完毕，退出百度盘，运行这个脚本；",
@@ -46,18 +46,14 @@ def main():
     ori_files, bak_files = None, None
     while 1:
         if not is_BaiduNetdisk_running():
-            print('getFiles()')
             # 1. 退出百度盘后，把文件改名（备份）
             # ori_files = getFiles()
             ori_files = [i + '.bdc-downloading' for i in getFiles()]
             bak_files = [i + '.bak' for i in ori_files]
             for ori, bak in zip(ori_files, bak_files):
                 os.rename(ori, bak)
-            print('os.rename(ori, bak)')
             # 2. 删除百度盘下载数据
-            print('rm_rf(getDIR())')
             rm_rf(getDIR())
-            print('rm_rf(getDIR())   DONE')
             break
     # 3. 在百度盘退出、重启前，把备份的文件恢复
     while 1:
