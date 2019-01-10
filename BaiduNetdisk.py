@@ -16,11 +16,13 @@ def getDIR():
     BaiduPath = {'D': "Library/Application Support/com.baidu.BaiduNetdisk-mac",
                  'W': r'AppData\Roaming\baidu\BaiduNetdisk\users'}
     path = os.path.join(os.path.expanduser('~'), BaiduPath[plat])
-    dirs = [i for i in os.listdir(path) if len(i) > 12]
+    dirs = [os.path.join(path, i) for i in os.listdir(path) if len(i) > 12]
+    dirs = [(i, os.stat(i).st_mtime) for i in dirs if os.path.isdir(i)]
+    dirs = sorted(dirs, key=lambda x: x[1])
     if dirs:
-        return os.path.join(path, dirs[0])
-    else:
-        raise RuntimeError("不能取得 BaiduNetdisk 数据文件夹。您的百度盘安装路径很独特")
+        return dirs[-1][0]
+    raise RuntimeError("不能取得 BaiduNetdisk 数据文件夹。您的百度盘安装路径很独特")
+
 
 def getFiles(dbpath):
     limit = datetime.datetime.now() - datetime.timedelta(minutes=5)
