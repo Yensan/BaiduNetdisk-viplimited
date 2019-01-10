@@ -7,9 +7,8 @@ import sqlite3
 
 
 def is_BaiduNetdisk_running():
-    if subprocess.getoutput('ps aux | grep BaiduNetdisk | grep -v grep'):
-        return True
-    return False
+    out = subprocess.getoutput('ps aux | grep BaiduNetdisk_mac | grep -v grep')
+    return True if out else False
 
 def getDIR():
     path = os.path.abspath(os.path.expanduser('~') +
@@ -47,13 +46,18 @@ def main():
     ori_files, bak_files = None, None
     while 1:
         if not is_BaiduNetdisk_running():
+            print('getFiles()')
             # 1. 退出百度盘后，把文件改名（备份）
-            ori_files = getFiles()
-            bak_files = [i+'.bak' for i in ori_files]
+            # ori_files = getFiles()
+            ori_files = [i + '.bdc-downloading' for i in getFiles()]
+            bak_files = [i + '.bak' for i in ori_files]
             for ori, bak in zip(ori_files, bak_files):
                 os.rename(ori, bak)
+            print('os.rename(ori, bak)')
             # 2. 删除百度盘下载数据
+            print('rm_rf(getDIR())')
             rm_rf(getDIR())
+            print('rm_rf(getDIR())   DONE')
             break
     # 3. 在百度盘退出、重启前，把备份的文件恢复
     while 1:
