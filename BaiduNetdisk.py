@@ -53,7 +53,7 @@ def main():
              "再次打开百度盘，你就又可以再次高速下载啦！"]
     for i, s in enumerate(echos): print('{}. {}'.format(i + 1, s))
     BdNdisk_path = getDIR()
-    extension = {'D': '.bdc-downloading', 'W': ''}
+    extension = {'D': '.bdc-downloading', 'W': '.baiduyun.downloading'}
     dbfiles = {'D': 'transmission.db', 'W': 'BaiduYunGuanjia.db'}
     ori_files, bak_files = None, None
     while 1:
