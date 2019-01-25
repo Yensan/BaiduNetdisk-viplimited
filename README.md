@@ -1,4 +1,4 @@
-# BaiduNetdisk-mac-viplimited
+# BaiduNetdisk-viplimited
 python 项目，适用于 MacOS 与 Windows。Mac自带python2，Windows需要安装Python3
 
 用百度网盘时，开始会有“试用极速下载特权”。一会儿后，马上回到 100kb/s 以下的速度了。这个软件，就是为了再次获得试用时长，从而破解限速。
